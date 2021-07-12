@@ -4,14 +4,147 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WindowsCulturesViewer.Views"
+        xmlns:converters="clr-namespace:WindowsCulturesViewer.Views.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="720" Width="1280" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+
+            <converters:CalendarNameConverter x:Key="CalendarNameConverter"/>
+            <converters:AdditionalCalendarNameConverter x:Key="AdditionalCalendarNameConverter"/>
+
+            <Style x:Key="ListViewStyle" TargetType="ListView">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+
+            <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="Black"/>
+            </Style>
+
+            <Style x:Key="CheckBoxStyle" TargetType="CheckBox">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="Normal"/>
+            </Style>
+
+            <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="Normal"/>
+            </Style>
+
+            <DataTemplate x:Key="CulturesTemplate"
+                          DataType="ListView">
+                <TextBlock Text="{Binding EnglishName}"/>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ListViewItemTemplate"
+                          DataType="ListViewItem">
+                <TextBlock Text="{Binding Converter={StaticResource AdditionalCalendarNameConverter}}"/>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TreeView Grid.Column="0"/>
+        <ListView Grid.Column="0"
+                  x:Name="CulturesListView"
+                  Style="{StaticResource ListViewStyle}"
+                  ItemsSource="{Binding Cultures}"
+                  ItemTemplate="{StaticResource CulturesTemplate}" SelectionChanged="CulturesListView_SelectionChanged"/>
+
+        <GroupBox Grid.Column="1"
+                  Header="Культура:"
+                  Style="{StaticResource GroupBoxStyle}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Тег культуры:"
+                           Style="{StaticResource TextBlockStyle}"
+                           Grid.Column="0"
+                           Grid.Row="0"/>
+
+                <TextBlock Text="{Binding CurrentCulture.Name}"
+                           Style="{StaticResource TextBlockStyle}"
+                           Grid.Column="1"
+                           Grid.Row="0"/>
+
+                <CheckBox Grid.Row="0"
+                          Grid.Column="2"
+                          IsEnabled="False"
+                          Content="Обобщеие культуры"
+                          ToolTip="Обобщённая версия для всех стран. Мировой стандарт данной культуры."
+                          Style="{StaticResource CheckBoxStyle}"
+                          IsChecked="{Binding CurrentCulture.IsNeutralCulture, Mode=OneWay}"/>
+
+                <TextBlock Text="Английское название культуры:"
+                           Style="{StaticResource TextBlockStyle}"
+                           Grid.Column="0"
+                           Grid.Row="1"/>
+
+                <TextBlock Text="{Binding CurrentCulture.EnglishName}"
+                           Style="{StaticResource TextBlockStyle}"
+                           Grid.Column="1"
+                           Grid.Row="1"/>
+
+                <TextBlock Text="Родное название культуры:"
+                           Style="{StaticResource TextBlockStyle}"
+                           Grid.Column="0"
+                           Grid.Row="2"/>
+
+                <TextBlock Text="{Binding CurrentCulture.NativeName}"
+                           Style="{StaticResource TextBlockStyle}"
+                           Grid.Column="1"
+                           Grid.Row="2"/>
+
+                <TextBlock Text="Календарь:"
+                           Style="{StaticResource TextBlockStyle}"
+                           Grid.Column="0"
+                           Grid.Row="3"/>
+
+                <TextBlock Text="{Binding CurrentCulture.Calendar, Converter={StaticResource CalendarNameConverter}}"
+                           Style="{StaticResource TextBlockStyle}"
+                           Grid.Column="1"
+                           Grid.Row="3"/>
+
+                <TextBlock Text="Дополнительные календари:"
+                           Style="{StaticResource TextBlockStyle}"
+                           Grid.Column="0"
+                           Grid.Row="4"/>
+
+                <ListView x:Name="CalendarsListView"
+                          ItemsSource="{Binding CurrentCulture.OptionalCalendars}"
+                          ItemTemplate="{StaticResource ListViewItemTemplate}"
+                          Grid.Column="1"
+                          Grid.Row="4"/>
+
+                <GroupBox Grid.Column="0"
+                          Grid.ColumnSpan="3"
+                          Grid.Row="5"
+                          Header="Примеры:"
+                          Style="{StaticResource GroupBoxStyle}">
+
+                </GroupBox>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>
