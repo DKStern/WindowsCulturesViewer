@@ -74,8 +74,8 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="100"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="Tag:"
@@ -126,7 +126,7 @@
                            Grid.Column="1"
                            Grid.Row="3"/>
 
-                <TextBlock Text="Addition calendars:"
+                <TextBlock Text="Optional calendars:"
                            Style="{StaticResource TextBlockStyle}"
                            Grid.Column="0"
                            Grid.Row="4"/>

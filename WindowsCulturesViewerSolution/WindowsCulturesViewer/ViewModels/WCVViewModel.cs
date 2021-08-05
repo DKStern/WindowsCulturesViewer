@@ -31,7 +31,7 @@ namespace WindowsCulturesViewer.ViewModels
         public WCVViewModel()
         {
             _cultures = CultureInfo.GetCultures(CultureTypes.AllCultures).ToList();
-            SynchronizeCultures();
+            SynchronizeCulturesAsunc();
         }
 
         public CultureInfo CurrentCulture
