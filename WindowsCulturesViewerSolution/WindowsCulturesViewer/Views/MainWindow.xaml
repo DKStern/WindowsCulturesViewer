@@ -52,12 +52,17 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
-        <ListView Grid.Column="0"
-                  x:Name="CulturesListView"
-                  Style="{StaticResource ListViewStyle}"
+        
+        <TreeView x:Name="CulturesTree" Grid.Column="0" 
                   ItemsSource="{Binding Cultures}"
-                  ItemTemplate="{StaticResource CulturesTemplate}" SelectionChanged="CulturesListView_SelectionChanged"/>
+                  Margin="5"
+                  SelectedItemChanged="CulturesTree_OnSelectedItemChanged">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding SubCultures}">
+                    <TextBlock Text="{Binding CultureInfo.EnglishName}"/>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
 
         <GroupBox Grid.Column="1"
                   Header="Culture:"

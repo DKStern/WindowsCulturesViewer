@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
+using WindowsCulturesViewer.Models;
 using WindowsCulturesViewer.ViewModels;
 
 namespace WindowsCulturesViewer.Views
@@ -19,15 +21,10 @@ namespace WindowsCulturesViewer.Views
             DataContext = _vm;
         }
 
-        private void CulturesListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void CulturesTree_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            var selected = CulturesListView.SelectedItem;
-
-            if (selected == null)
-                return;
-
-            if (selected is CultureInfo info) 
-                _vm.CurrentCulture = info;
+            if (CulturesTree.SelectedItem is Culture item)
+                _vm.CurrentCulture = item.CultureInfo;
         }
     }
 }
