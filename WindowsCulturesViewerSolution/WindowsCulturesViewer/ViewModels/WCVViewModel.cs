@@ -89,7 +89,7 @@ namespace WindowsCulturesViewer.ViewModels
                         if (tag.Length != level)
                             return false;
 
-                        if(!cultureInfo.Name.Contains(parent.CultureInfo.Name))
+                        if(!cultureInfo.Name.StartsWith(parent.CultureInfo.Name))
                             return false;
 
                         return true;
@@ -97,8 +97,6 @@ namespace WindowsCulturesViewer.ViewModels
 
                     if (!subs.Any())
                         break;
-
-                    subs.Sort((c1, c2) => string.CompareOrdinal(c1.CultureInfo.Name, c2.CultureInfo.Name));
 
                     subs.ForEach(culture =>
                     {
@@ -129,7 +127,7 @@ namespace WindowsCulturesViewer.ViewModels
                     if (!i.IsNeutralCulture)
                         return false;
 
-                    if (!cultureInfo.Name.Contains(i.Name))
+                    if (!cultureInfo.Name.StartsWith(i.Name))
                         return false;
 
                     return true;
@@ -156,7 +154,38 @@ namespace WindowsCulturesViewer.ViewModels
                 used[culture] = true;
             });
         }
-        
+
+        private void SortCultures(List<Culture> cultures = null)
+        {
+            var list = cultures ?? Cultures.ToList();
+
+            list.Sort((c1, c2) => string.CompareOrdinal(c1.CultureInfo.EnglishName, c2.CultureInfo.EnglishName));
+            list.ForEach(culture =>
+            {
+                if (culture.SubCultures.Count > 1)
+                {
+                    var l = culture.SubCultures.ToList();
+                    SortCultures(l);
+
+                    _uiDispatcher.BeginInvoke(() =>
+                    {
+                        culture.SubCultures.Clear();
+                        l.ForEach(c => culture.SubCultures.Add(c));
+                    });
+                }
+
+            });
+
+            if (cultures == null)
+            {
+                _uiDispatcher.BeginInvoke(() => 
+                {
+                    Cultures.Clear();
+                    list.ForEach(culture => Cultures.Add(culture));
+                });
+            }
+        }
+
         private void SynchronizeCultures()
         {
             Cultures.Clear();
@@ -166,36 +195,10 @@ namespace WindowsCulturesViewer.ViewModels
             _cultures.ForEach(c => used.Add(new Culture(c), false));
 
             GetNeutral(1, used);
-
             GetNonNeutral(used);
+            SortCultures();
+
             UpdateAll();
-
-            //_cultures.ForEach(cultureInfo =>
-            //{
-            //    if (!cultureInfo.IsNeutralCulture)
-            //        return;
-
-            //    Cultures.Add(new Culture(cultureInfo));
-            //});
-
-
-            //Cultures.ToList().AsParallel().AsOrdered().ForAll(culture =>
-            //{
-            //    var tag = culture.CultureInfo.Name;
-
-            //    var subs = _cultures.Where(sub =>
-            //    {
-            //        var tags = sub.Name.Split('-');
-            //        if (tags.Length > 1 && tags[0] == tag)
-            //            return true;
-
-            //        return false;
-            //    }).ToList();
-
-            //    subs.Sort((c1, c2) => string.CompareOrdinal(c1.Name, c2.Name));
-
-            //    subs.ForEach(sub => culture.SubCultures.Add(new Culture(sub)));
-            //});
         }
 
         private async void SynchronizeCulturesAsunc()
