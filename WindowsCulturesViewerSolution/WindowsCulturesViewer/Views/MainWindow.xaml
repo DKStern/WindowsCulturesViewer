@@ -60,7 +60,7 @@
                   ItemTemplate="{StaticResource CulturesTemplate}" SelectionChanged="CulturesListView_SelectionChanged"/>
 
         <GroupBox Grid.Column="1"
-                  Header="Культура:"
+                  Header="Culture:"
                   Style="{StaticResource GroupBoxStyle}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -78,7 +78,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Тег культуры:"
+                <TextBlock Text="Tag:"
                            Style="{StaticResource TextBlockStyle}"
                            Grid.Column="0"
                            Grid.Row="0"/>
@@ -91,12 +91,12 @@
                 <CheckBox Grid.Row="0"
                           Grid.Column="2"
                           IsEnabled="False"
-                          Content="Обобщеие культуры"
-                          ToolTip="Обобщённая версия для всех стран. Мировой стандарт данной культуры."
+                          Content="Is general"
+                          ToolTip="General version for all countries."
                           Style="{StaticResource CheckBoxStyle}"
                           IsChecked="{Binding CurrentCulture.IsNeutralCulture, Mode=OneWay}"/>
 
-                <TextBlock Text="Английское название культуры:"
+                <TextBlock Text="English name:"
                            Style="{StaticResource TextBlockStyle}"
                            Grid.Column="0"
                            Grid.Row="1"/>
@@ -106,7 +106,7 @@
                            Grid.Column="1"
                            Grid.Row="1"/>
 
-                <TextBlock Text="Родное название культуры:"
+                <TextBlock Text="Native name:"
                            Style="{StaticResource TextBlockStyle}"
                            Grid.Column="0"
                            Grid.Row="2"/>
@@ -116,7 +116,7 @@
                            Grid.Column="1"
                            Grid.Row="2"/>
 
-                <TextBlock Text="Календарь:"
+                <TextBlock Text="Calendar:"
                            Style="{StaticResource TextBlockStyle}"
                            Grid.Column="0"
                            Grid.Row="3"/>
@@ -126,7 +126,7 @@
                            Grid.Column="1"
                            Grid.Row="3"/>
 
-                <TextBlock Text="Дополнительные календари:"
+                <TextBlock Text="Addition calendars:"
                            Style="{StaticResource TextBlockStyle}"
                            Grid.Column="0"
                            Grid.Row="4"/>
@@ -140,9 +140,60 @@
                 <GroupBox Grid.Column="0"
                           Grid.ColumnSpan="3"
                           Grid.Row="5"
-                          Header="Примеры:"
+                          Header="Examples:"
                           Style="{StaticResource GroupBoxStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
+                        <TextBlock Text="Number:"
+                                   Style="{StaticResource TextBlockStyle}"
+                                   Grid.Column="0"
+                                   Grid.Row="0"/>
+
+                        <TextBlock Text="{Binding NumExample}"
+                                   Style="{StaticResource TextBlockStyle}"
+                                   Grid.Column="1"
+                                   Grid.Row="0"/>
+
+                        <TextBlock Text="Date:"
+                                   Style="{StaticResource TextBlockStyle}"
+                                   Grid.Column="0"
+                                   Grid.Row="1"/>
+
+                        <TextBlock Text="{Binding DateExample}"
+                                   Style="{StaticResource TextBlockStyle}"
+                                   Grid.Column="1"
+                                   Grid.Row="1"/>
+
+                        <TextBlock Text="Time:"
+                                   Style="{StaticResource TextBlockStyle}"
+                                   Grid.Column="0"
+                                   Grid.Row="2"/>
+
+                        <TextBlock Text="{Binding TimeExample}"
+                                   Style="{StaticResource TextBlockStyle}"
+                                   Grid.Column="1"
+                                   Grid.Row="2"/>
+
+                        <TextBlock Text="Currency:"
+                                   Style="{StaticResource TextBlockStyle}"
+                                   Grid.Column="0"
+                                   Grid.Row="3"/>
+
+                        <TextBlock Text="{Binding CurrencyExample}"
+                                   Style="{StaticResource TextBlockStyle}"
+                                   Grid.Column="1"
+                                   Grid.Row="3"/>
+                    </Grid>
                 </GroupBox>
             </Grid>
         </GroupBox>

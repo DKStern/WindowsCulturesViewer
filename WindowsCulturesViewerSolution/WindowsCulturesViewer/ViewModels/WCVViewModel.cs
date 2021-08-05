@@ -1,45 +1,71 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using WindowsCulturesViewer.Annotations;
 
 namespace WindowsCulturesViewer.ViewModels
 {
     public class WCVViewModel : INotifyPropertyChanged
     {
-        private List<CultureInfo> cultures;
+        private readonly List<CultureInfo> _cultures;
 
-        private CultureInfo currentCulture;
-        
+        private CultureInfo _currentCulture;
+
+        private const double c_numExample = 124536.20;
+
         public ObservableCollection<CultureInfo> Cultures { get; set; } = new ObservableCollection<CultureInfo>();
+
+        public string NumExample => c_numExample.ToString(_currentCulture);
+
+        public string DateExample => DateTime.Now.ToString(_currentCulture);
+
+        public string TimeExample => DateTime.Now.ToLocalTime().ToString(_currentCulture);
+
+        public string CurrencyExample => c_numExample.ToString("C", _currentCulture);
 
         public WCVViewModel()
         {
-            cultures = CultureInfo.GetCultures(CultureTypes.AllCultures).ToList();
+            _cultures = CultureInfo.GetCultures(CultureTypes.AllCultures).ToList();
             SynchronizeCultures();
         }
 
         public CultureInfo CurrentCulture
         {
-            get => currentCulture;
+            get => _currentCulture;
             set
             {
-                if (Equals(currentCulture, value))
+                if (Equals(_currentCulture, value))
                     return;
 
-                currentCulture = value;
-                OnPropertyChanged(nameof(CurrentCulture));
+                _currentCulture = value;
+                UpdateAll();
             }
         }
 
         private void SynchronizeCultures()
         {
             Cultures.Clear();
-            cultures.Sort((c1, c2) => string.Compare(c1.Name, c2.Name));
-            cultures.ForEach(x => Cultures.Add(x));
+            _cultures.Sort((c1, c2) => string.Compare(c1.EnglishName, c2.EnglishName));
+            _cultures.ForEach(x => Cultures.Add(x));
+        }
+
+        private async void SynchronizeCulturesAsunc()
+        {
+            await Task.Run(SynchronizeCultures);
+        }
+
+        private void UpdateAll()
+        {
+            OnPropertyChanged(nameof(CurrentCulture));
+            OnPropertyChanged(nameof(NumExample));
+            OnPropertyChanged(nameof(DateExample));
+            OnPropertyChanged(nameof(TimeExample));
+            OnPropertyChanged(nameof(CurrencyExample));
         }
         
         #region Интерфейс уведомлений
